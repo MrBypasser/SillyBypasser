@@ -1,201 +1,220 @@
 local player = game.Players.LocalPlayer
-local screenGui = Instance.new("ScreenGui")
-screenGui.Name = "SillyBypasserGui"
-screenGui.Parent = player:WaitForChild("PlayerGui")
+local screenGui
+local frame
 
--- Create the main frame
-local frame = Instance.new("Frame")
-frame.Size = UDim2.new(0, 400, 0, 250)
-frame.Position = UDim2.new(0.5, -200, 0.5, -125)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-frame.BorderSizePixel = 0
-frame.AnchorPoint = Vector2.new(0.5, 0.5)
-frame.Parent = screenGui
-
-local frameCorner = Instance.new("UICorner")
-frameCorner.CornerRadius = UDim.new(0, 10)
-frameCorner.Parent = frame
-
--- Version label (Top Left)
-local versionLabel = Instance.new("TextLabel")
-versionLabel.Size = UDim2.new(0, 50, 0, 20)
-versionLabel.Position = UDim2.new(0, 10, 0, 10)  -- Top left
-versionLabel.BackgroundTransparency = 1
-versionLabel.Text = "V.0.6"  -- Updated version number
-versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-versionLabel.TextSize = 14
-versionLabel.Font = Enum.Font.Gotham
-versionLabel.Parent = frame
-
--- Title label
-local titleLabel = Instance.new("TextLabel")
-titleLabel.Size = UDim2.new(1, -40, 0, 30)
-titleLabel.Position = UDim2.new(0, 10, 0, 5)
-titleLabel.BackgroundTransparency = 1
-titleLabel.Text = "Silly Bypasser"
-titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-titleLabel.TextSize = 20
-titleLabel.Font = Enum.Font.GothamBold
-titleLabel.Parent = frame
-
--- Input TextBox
-local inputBox = Instance.new("TextBox")
-inputBox.Size = UDim2.new(1, -20, 0, 50)
-inputBox.Position = UDim2.new(0, 10, 0, 40)
-inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-inputBox.PlaceholderText = "Type here..."
-inputBox.Text = ""
-inputBox.TextSize = 18
-inputBox.Font = Enum.Font.Gotham
-inputBox.Parent = frame
-
-local inputCorner = Instance.new("UICorner")
-inputCorner.CornerRadius = UDim.new(0, 5)
-inputCorner.Parent = inputBox
-
--- Converted TextBox (read-only)
-local convertedBox = Instance.new("TextBox")
-convertedBox.Size = UDim2.new(1, -20, 0, 50)
-convertedBox.Position = UDim2.new(0, 10, 0, 100)
-convertedBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-convertedBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-convertedBox.Text = ""
-convertedBox.TextEditable = true
-convertedBox.ClearTextOnFocus = false
-convertedBox.TextSize = 18
-convertedBox.Font = Enum.Font.Gotham
-convertedBox.PlaceholderText = "Converted text will appear here..."
-convertedBox.Parent = frame
-
-local convertedCorner = Instance.new("UICorner")
-convertedCorner.CornerRadius = UDim.new(0, 5)
-convertedCorner.Parent = convertedBox
-
--- Reminder label
-local reminderLabel = Instance.new("TextLabel")
-reminderLabel.Size = UDim2.new(1, -20, 0, 40)
-reminderLabel.Position = UDim2.new(0, 10, 1, -50)
-reminderLabel.BackgroundTransparency = 1
-reminderLabel.Text = "If you are getting tagged, say /e roblox in chat."
-reminderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-reminderLabel.TextSize = 14
-reminderLabel.Font = Enum.Font.Gotham
-reminderLabel.TextWrapped = true
-reminderLabel.Parent = frame
-
--- Anti Chat Logger Button
-local antiChatLoggerButton = Instance.new("TextButton")
-antiChatLoggerButton.Size = UDim2.new(1, -20, 0, 40)
-antiChatLoggerButton.Position = UDim2.new(0, 10, 0, 150)  -- Below the convertedBox
-antiChatLoggerButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
-antiChatLoggerButton.Text = "Anti Chat Logger"
-antiChatLoggerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-antiChatLoggerButton.TextSize = 18
-antiChatLoggerButton.Font = Enum.Font.Gotham
-antiChatLoggerButton.Parent = frame
-
--- Connect the button to execute the Anti Chat Logger script
-antiChatLoggerButton.MouseButton1Click:Connect(function()
-    loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
-end)
-
--- Random font styles including new characters
-local fontStyles = {
-    "̷", "̴", "͓̽", "̶", "͞", "̅", "̑", "͠", "̒", "͟", "͜", -- original styles
-    "̳", "̾"  -- new styles for A̳, a̾, etc.
-}
-
--- Function to randomize font styles in a string
-local function randomizeFontStyles(text)
-    local result = ""
-    for i = 1, #text do
-        local char = text:sub(i, i)
-        local style = fontStyles[math.random(1, #fontStyles)]  -- Randomly pick a style
-        result = result .. char .. style  -- Apply style after each character
+-- Function to create the GUI
+local function createGui()
+    -- Check if the ScreenGui already exists, if not create it
+    if not screenGui then
+        screenGui = Instance.new("ScreenGui")
+        screenGui.Name = "SillyBypasserGui"
+        screenGui.Parent = player:WaitForChild("PlayerGui")
     end
-    return result
+
+    -- Create the main frame
+    if not frame then
+        frame = Instance.new("Frame")
+        frame.Size = UDim2.new(0, 400, 0, 250)
+        frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+        frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+        frame.BorderSizePixel = 0
+        frame.AnchorPoint = Vector2.new(0.5, 0.5)
+        frame.Parent = screenGui
+
+        local frameCorner = Instance.new("UICorner")
+        frameCorner.CornerRadius = UDim.new(0, 10)
+        frameCorner.Parent = frame
+
+        -- Version label (Top Left)
+        local versionLabel = Instance.new("TextLabel")
+        versionLabel.Size = UDim2.new(0, 50, 0, 20)
+        versionLabel.Position = UDim2.new(0, 10, 0, 10)  -- Top left
+        versionLabel.BackgroundTransparency = 1
+        versionLabel.Text = "V.0.6"  -- Updated version number
+        versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        versionLabel.TextSize = 14
+        versionLabel.Font = Enum.Font.Gotham
+        versionLabel.Parent = frame
+
+        -- Title label
+        local titleLabel = Instance.new("TextLabel")
+        titleLabel.Size = UDim2.new(1, -40, 0, 30)
+        titleLabel.Position = UDim2.new(0, 10, 0, 5)
+        titleLabel.BackgroundTransparency = 1
+        titleLabel.Text = "Silly Bypasser"
+        titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        titleLabel.TextSize = 20
+        titleLabel.Font = Enum.Font.GothamBold
+        titleLabel.Parent = frame
+
+        -- Input TextBox
+        local inputBox = Instance.new("TextBox")
+        inputBox.Size = UDim2.new(1, -20, 0, 50)
+        inputBox.Position = UDim2.new(0, 10, 0, 40)
+        inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        inputBox.PlaceholderText = "Type here..."
+        inputBox.Text = ""
+        inputBox.TextSize = 18
+        inputBox.Font = Enum.Font.Gotham
+        inputBox.Parent = frame
+
+        local inputCorner = Instance.new("UICorner")
+        inputCorner.CornerRadius = UDim.new(0, 5)
+        inputCorner.Parent = inputBox
+
+        -- Converted TextBox (read-only)
+        local convertedBox = Instance.new("TextBox")
+        convertedBox.Size = UDim2.new(1, -20, 0, 50)
+        convertedBox.Position = UDim2.new(0, 10, 0, 100)
+        convertedBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        convertedBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+        convertedBox.Text = ""
+        convertedBox.TextEditable = true
+        convertedBox.ClearTextOnFocus = false
+        convertedBox.TextSize = 18
+        convertedBox.Font = Enum.Font.Gotham
+        convertedBox.PlaceholderText = "Converted text will appear here..."
+        convertedBox.Parent = frame
+
+        local convertedCorner = Instance.new("UICorner")
+        convertedCorner.CornerRadius = UDim.new(0, 5)
+        convertedCorner.Parent = convertedBox
+
+        -- Reminder label
+        local reminderLabel = Instance.new("TextLabel")
+        reminderLabel.Size = UDim2.new(1, -20, 0, 40)
+        reminderLabel.Position = UDim2.new(0, 10, 1, -50)
+        reminderLabel.BackgroundTransparency = 1
+        reminderLabel.Text = "If you are getting tagged, say /e roblox in chat."
+        reminderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        reminderLabel.TextSize = 14
+        reminderLabel.Font = Enum.Font.Gotham
+        reminderLabel.TextWrapped = true
+        reminderLabel.Parent = frame
+
+        -- Anti Chat Logger Button
+        local antiChatLoggerButton = Instance.new("TextButton")
+        antiChatLoggerButton.Size = UDim2.new(1, -20, 0, 40)
+        antiChatLoggerButton.Position = UDim2.new(0, 10, 0, 150)  -- Below the convertedBox
+        antiChatLoggerButton.BackgroundColor3 = Color3.fromRGB(0, 255, 0)
+        antiChatLoggerButton.Text = "Anti Chat Logger"
+        antiChatLoggerButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        antiChatLoggerButton.TextSize = 18
+        antiChatLoggerButton.Font = Enum.Font.Gotham
+        antiChatLoggerButton.Parent = frame
+
+        -- Connect the button to execute the Anti Chat Logger script
+        antiChatLoggerButton.MouseButton1Click:Connect(function()
+            loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
+        end)
+
+        -- Random font styles including new characters
+        local fontStyles = {
+            "̷", "̴", "͓̽", "̶", "͞", "̅", "̑", "͠", "̒", "͟", "͜", -- original styles
+            "̳", "̾"  -- new styles for A̳, a̾, etc.
+        }
+
+        -- Function to randomize font styles in a string
+        local function randomizeFontStyles(text)
+            local result = ""
+            for i = 1, #text do
+                local char = text:sub(i, i)
+                local style = fontStyles[math.random(1, #fontStyles)]  -- Randomly pick a style
+                result = result .. char .. style  -- Apply style after each character
+            end
+            return result
+        end
+
+        -- Update the convertedBox whenever input changes
+        inputBox.Changed:Connect(function(property)
+            if property == "Text" then
+                convertedBox.Text = randomizeFontStyles(inputBox.Text)
+            end
+        end)
+
+        -- Notification about K to toggle GUI (at the top center)
+        local notificationLabel = Instance.new("TextLabel")
+        notificationLabel.Size = UDim2.new(0, 400, 0, 30)
+        notificationLabel.Position = UDim2.new(0.5, -200, 0, 10)  -- Centered at the top
+        notificationLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+        notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+        notificationLabel.Text = "Use K to open and close the GUI"
+        notificationLabel.TextSize = 16
+        notificationLabel.Font = Enum.Font.Gotham
+        notificationLabel.TextWrapped = true
+        notificationLabel.Parent = screenGui
+
+        -- Hide notification after 10 seconds
+        wait(10)
+        notificationLabel:Destroy()
+
+        -- Key press detection for toggling the GUI (K to open/close)
+        local guiVisible = true
+        local UserInputService = game:GetService("UserInputService")
+
+        local isTyping = false
+
+        inputBox.Focused:Connect(function()
+            isTyping = true  -- Set isTyping to true when typing
+        end)
+
+        inputBox.FocusLost:Connect(function()
+            isTyping = false  -- Set isTyping to false when focus is lost (typing done)
+        end)
+
+        UserInputService.InputBegan:Connect(function(input)
+            if input.KeyCode == Enum.KeyCode.K and not isTyping then  -- Only toggle when not typing
+                guiVisible = not guiVisible
+                frame.Visible = guiVisible
+            end
+        end)
+
+        -- Red X to close the GUI (Top Right)
+        local closeButton = Instance.new("TextButton")
+        closeButton.Size = UDim2.new(0, 30, 0, 30)
+        closeButton.Position = UDim2.new(1, -40, 0, 10)
+        closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+        closeButton.Text = "X"
+        closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        closeButton.TextSize = 18
+        closeButton.Font = Enum.Font.GothamBold
+        closeButton.Parent = frame
+
+        closeButton.MouseButton1Click:Connect(function()
+            frame:Destroy()  -- Destroy the entire GUI when the button is clicked
+        end)
+
+        -- Draggable GUI Logic
+        local dragging, dragInput, dragStart, startPos
+
+        frame.InputBegan:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = true
+                dragStart = input.Position
+                startPos = frame.Position
+            end
+        end)
+
+        frame.InputEnded:Connect(function(input)
+            if input.UserInputType == Enum.UserInputType.MouseButton1 then
+                dragging = false
+            end
+        end)
+
+        frame.InputChanged:Connect(function(input)
+            if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+                local delta = input.Position - dragStart
+                frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+            end
+        end)
+    end
 end
 
--- Update the convertedBox whenever input changes
-inputBox.Changed:Connect(function(property)
-    if property == "Text" then
-        convertedBox.Text = randomizeFontStyles(inputBox.Text)
-    end
+-- Re-create GUI on respawn
+player.CharacterAdded:Connect(function()
+    createGui()  -- Re-create the GUI whenever the player respawns
 end)
 
--- Notification about K to toggle GUI (at the top center)
-local notificationLabel = Instance.new("TextLabel")
-notificationLabel.Size = UDim2.new(0, 400, 0, 30)
-notificationLabel.Position = UDim2.new(0.5, -200, 0, 10)  -- Centered at the top
-notificationLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-notificationLabel.Text = "Use K to open and close the GUI"
-notificationLabel.TextSize = 16
-notificationLabel.Font = Enum.Font.Gotham
-notificationLabel.TextWrapped = true
-notificationLabel.Parent = screenGui
-
--- Hide notification after 10 seconds
-wait(10)
-notificationLabel:Destroy()
-
--- Key press detection for toggling the GUI (K to open/close)
-local guiVisible = true
-local UserInputService = game:GetService("UserInputService")
-
-local isTyping = false
-
-inputBox.Focused:Connect(function()
-    isTyping = true
-end)
-
-inputBox.FocusLost:Connect(function()
-    isTyping = false
-end)
-
-UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.K and not isTyping then
-        guiVisible = not guiVisible
-        frame.Visible = guiVisible
-    end
-end)
-
--- Red X to close the GUI (Top Right)
-local closeButton = Instance.new("TextButton")
-closeButton.Size = UDim2.new(0, 30, 0, 30)
-closeButton.Position = UDim2.new(1, -40, 0, 10)
-closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-closeButton.Text = "X"
-closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-closeButton.TextSize = 18
-closeButton.Font = Enum.Font.GothamBold
-closeButton.Parent = frame
-
-closeButton.MouseButton1Click:Connect(function()
-    frame:Destroy()  -- Destroy the entire GUI when the button is clicked
-end)
-
--- Draggable GUI Logic
-local dragging, dragInput, dragStart, startPos
-
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-    end
-end)
-
-frame.InputEnded:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 then
-        dragging = false
-    end
-end)
-
-frame.InputChanged:Connect(function(input)
-    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
+-- Create the GUI on initial load
+createGui()
