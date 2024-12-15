@@ -100,24 +100,19 @@ antiChatLoggerButton.MouseButton1Click:Connect(function()
     loadstring(game:HttpGet("https://raw.githubusercontent.com/AnthonyIsntHere/anthonysrepository/main/scripts/AntiChatLogger.lua", true))()
 end)
 
--- Small Caps Alphabet Conversion Map (includes both upper and lowercase)
-local smallCapsAlphabet = {
-    a = "ᴀ", b = "ʙ", c = "ᴄ", d = "ᴅ", e = "ᴇ", f = "ꜰ", g = "ɢ",
-    h = "ʜ", i = "ɪ", j = "ᴊ", k = "ᴋ", l = "ʟ", m = "ᴍ", n = "ɴ",
-    o = "ᴏ", p = "ᴘ", q = "Q", r = "ʀ", s = "ꜱ", t = "ᴛ", u = "ᴜ",
-    v = "ᴠ", w = "ᴡ", x = "x", y = "ʏ", z = "ᴢ", 
-    A = "ᴀ", B = "ʙ", C = "ᴄ", D = "ᴅ", E = "ᴇ", F = "ꜰ", G = "ɢ",
-    H = "ʜ", I = "ɪ", J = "ᴊ", K = "ᴋ", L = "ʟ", M = "ᴍ", N = "ɴ",
-    O = "ᴏ", P = "ᴘ", Q = "Q", R = "ʀ", S = "ꜱ", T = "ᴛ", U = "ᴜ",
-    V = "ᴠ", W = "ᴡ", X = "x", Y = "ʏ", Z = "ᴢ"
+-- Random font styles including new characters
+local fontStyles = {
+    "̷", "̴", "͓̽", "̶", "͞", "̅", "̑", "͠", "̒", "͟", "͜", -- original styles
+    "̳", "̾"  -- new styles for A̳, a̾, etc.
 }
 
--- Function to convert text to small caps alphabet
-local function convertToSmallCaps(text)
+-- Function to randomize font styles in a string
+local function randomizeFontStyles(text)
     local result = ""
     for i = 1, #text do
         local char = text:sub(i, i)
-        result = result .. (smallCapsAlphabet[char] or char)
+        local style = fontStyles[math.random(1, #fontStyles)]  -- Randomly pick a style
+        result = result .. char .. style  -- Apply style after each character
     end
     return result
 end
@@ -125,7 +120,7 @@ end
 -- Update the convertedBox whenever input changes
 inputBox.Changed:Connect(function(property)
     if property == "Text" then
-        convertedBox.Text = convertToSmallCaps(inputBox.Text)
+        convertedBox.Text = randomizeFontStyles(inputBox.Text)
     end
 end)
 
