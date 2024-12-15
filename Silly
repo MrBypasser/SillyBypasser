@@ -1,201 +1,179 @@
 local player = game.Players.LocalPlayer
+local screenGui = Instance.new("ScreenGui")
+screenGui.Name = "SillyBypasserGui"
+screenGui.Parent = player:WaitForChild("PlayerGui")
 
--- Function to create the GUI
-local function createSillyBypasserGui()
-    -- Check if the GUI already exists
-    if player:WaitForChild("PlayerGui"):FindFirstChild("SillyBypasserGui") then
-        return
+-- Create the main frame
+local frame = Instance.new("Frame")
+frame.Size = UDim2.new(0, 400, 0, 250)
+frame.Position = UDim2.new(0.5, -200, 0.5, -125)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+frame.BorderSizePixel = 0
+frame.AnchorPoint = Vector2.new(0.5, 0.5)
+frame.Parent = screenGui
+
+local frameCorner = Instance.new("UICorner")
+frameCorner.CornerRadius = UDim.new(0, 10)
+frameCorner.Parent = frame
+
+-- Version label (Top Left)
+local versionLabel = Instance.new("TextLabel")
+versionLabel.Size = UDim2.new(0, 50, 0, 20)
+versionLabel.Position = UDim2.new(0, 10, 0, 10)  -- Top left
+versionLabel.BackgroundTransparency = 1
+versionLabel.Text = "V.0.55"
+versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+versionLabel.TextSize = 14
+versionLabel.Font = Enum.Font.Gotham
+versionLabel.Parent = frame
+
+-- Title label
+local titleLabel = Instance.new("TextLabel")
+titleLabel.Size = UDim2.new(1, -40, 0, 30)
+titleLabel.Position = UDim2.new(0, 10, 0, 5)
+titleLabel.BackgroundTransparency = 1
+titleLabel.Text = "Silly Bypasser"
+titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+titleLabel.TextSize = 20
+titleLabel.Font = Enum.Font.GothamBold
+titleLabel.Parent = frame
+
+-- Input TextBox
+local inputBox = Instance.new("TextBox")
+inputBox.Size = UDim2.new(1, -20, 0, 50)
+inputBox.Position = UDim2.new(0, 10, 0, 40)
+inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+inputBox.PlaceholderText = "Type here..."
+inputBox.Text = ""
+inputBox.TextSize = 18
+inputBox.Font = Enum.Font.Gotham
+inputBox.Parent = frame
+
+local inputCorner = Instance.new("UICorner")
+inputCorner.CornerRadius = UDim.new(0, 5)
+inputCorner.Parent = inputBox
+
+-- Converted TextBox (read-only)
+local convertedBox = Instance.new("TextBox")
+convertedBox.Size = UDim2.new(1, -20, 0, 50)
+convertedBox.Position = UDim2.new(0, 10, 0, 100)
+convertedBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+convertedBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+convertedBox.Text = ""
+convertedBox.TextEditable = true
+convertedBox.ClearTextOnFocus = false
+convertedBox.TextSize = 18
+convertedBox.Font = Enum.Font.Gotham
+convertedBox.PlaceholderText = "Converted text will appear here..."
+convertedBox.Parent = frame
+
+local convertedCorner = Instance.new("UICorner")
+convertedCorner.CornerRadius = UDim.new(0, 5)
+convertedCorner.Parent = convertedBox
+
+-- Reminder label
+local reminderLabel = Instance.new("TextLabel")
+reminderLabel.Size = UDim2.new(1, -20, 0, 40)
+reminderLabel.Position = UDim2.new(0, 10, 1, -50)
+reminderLabel.BackgroundTransparency = 1
+reminderLabel.Text = "If you are getting tagged, say /e roblox in chat."
+reminderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+reminderLabel.TextSize = 14
+reminderLabel.Font = Enum.Font.Gotham
+reminderLabel.TextWrapped = true
+reminderLabel.Parent = frame
+
+-- Small Caps Alphabet Conversion Map (includes both upper and lowercase)
+local smallCapsAlphabet = {
+    a = "ᴀ", b = "ʙ", c = "ᴄ", d = "ᴅ", e = "ᴇ", f = "ꜰ", g = "ɢ",
+    h = "ʜ", i = "ɪ", j = "ᴊ", k = "ᴋ", l = "ʟ", m = "ᴍ", n = "ɴ",
+    o = "ᴏ", p = "ᴘ", q = "Q", r = "ʀ", s = "ꜱ", t = "ᴛ", u = "ᴜ",
+    v = "ᴠ", w = "ᴡ", x = "x", y = "ʏ", z = "ᴢ", 
+    A = "ᴀ", B = "ʙ", C = "ᴄ", D = "ᴅ", E = "ᴇ", F = "ꜰ", G = "ɢ",
+    H = "ʜ", I = "ɪ", J = "ᴊ", K = "ᴋ", L = "ʟ", M = "ᴍ", N = "ɴ",
+    O = "ᴏ", P = "ᴘ", Q = "Q", R = "ʀ", S = "ꜱ", T = "ᴛ", U = "ᴜ",
+    V = "ᴠ", W = "ᴡ", X = "x", Y = "ʏ", Z = "ᴢ"
+}
+
+-- Function to convert text to small caps alphabet
+local function convertToSmallCaps(text)
+    local result = ""
+    for i = 1, #text do
+        local char = text:sub(i, i)
+        result = result .. (smallCapsAlphabet[char] or char)
     end
-
-    local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "SillyBypasserGui"
-    screenGui.Parent = player:WaitForChild("PlayerGui")
-
-    -- Create the main frame
-    local frame = Instance.new("Frame")
-    frame.Size = UDim2.new(0, 400, 0, 250)
-    frame.Position = UDim2.new(0.5, -200, 0.5, -125)
-    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
-    frame.BorderSizePixel = 0
-    frame.AnchorPoint = Vector2.new(0.5, 0.5)
-    frame.Parent = screenGui
-
-    local frameCorner = Instance.new("UICorner")
-    frameCorner.CornerRadius = UDim.new(0, 10)
-    frameCorner.Parent = frame
-
-    -- Version label
-    local versionLabel = Instance.new("TextLabel")
-    versionLabel.Size = UDim2.new(0, 50, 0, 20)
-    versionLabel.Position = UDim2.new(0, 10, 0, 10)
-    versionLabel.BackgroundTransparency = 1
-    versionLabel.Text = "V.0.5"
-    versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    versionLabel.TextSize = 14
-    versionLabel.Font = Enum.Font.Gotham
-    versionLabel.Parent = frame
-
-    -- Title label
-    local titleLabel = Instance.new("TextLabel")
-    titleLabel.Size = UDim2.new(1, -40, 0, 30)
-    titleLabel.Position = UDim2.new(0, 10, 0, 5)
-    titleLabel.BackgroundTransparency = 1
-    titleLabel.Text = "Silly Bypasser"
-    titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    titleLabel.TextSize = 20
-    titleLabel.Font = Enum.Font.GothamBold
-    titleLabel.Parent = frame
-
-    -- Minimize button
-    local minimizeButton = Instance.new("TextButton")
-    minimizeButton.Size = UDim2.new(0, 30, 0, 30)
-    minimizeButton.Position = UDim2.new(1, -35, 0, 5)
-    minimizeButton.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    minimizeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    minimizeButton.Text = "-"
-    minimizeButton.TextSize = 20
-    minimizeButton.Font = Enum.Font.GothamBold
-    minimizeButton.Parent = frame
-
-    local minimizeCorner = Instance.new("UICorner")
-    minimizeCorner.CornerRadius = UDim.new(0, 5)
-    minimizeCorner.Parent = minimizeButton
-
-    -- Close (Red X) button
-    local closeButton = Instance.new("TextButton")
-    closeButton.Size = UDim2.new(0, 30, 0, 30)
-    closeButton.Position = UDim2.new(1, -35, 0, 5)
-    closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)  -- Red color
-    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
-    closeButton.Text = "X"
-    closeButton.TextSize = 20
-    closeButton.Font = Enum.Font.GothamBold
-    closeButton.Parent = frame
-
-    local closeCorner = Instance.new("UICorner")
-    closeCorner.CornerRadius = UDim.new(0, 5)
-    closeCorner.Parent = closeButton
-
-    -- Input TextBox
-    local inputBox = Instance.new("TextBox")
-    inputBox.Size = UDim2.new(1, -20, 0, 50)
-    inputBox.Position = UDim2.new(0, 10, 0, 40)
-    inputBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    inputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    inputBox.PlaceholderText = "Type here..."
-    inputBox.Text = ""
-    inputBox.TextSize = 18
-    inputBox.Font = Enum.Font.Gotham
-    inputBox.Parent = frame
-
-    local inputCorner = Instance.new("UICorner")
-    inputCorner.CornerRadius = UDim.new(0, 5)
-    inputCorner.Parent = inputBox
-
-    -- Converted TextBox (read-only)
-    local convertedBox = Instance.new("TextBox")
-    convertedBox.Size = UDim2.new(1, -20, 0, 50)
-    convertedBox.Position = UDim2.new(0, 10, 0, 100)
-    convertedBox.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    convertedBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-    convertedBox.Text = ""
-    convertedBox.TextEditable = true
-    convertedBox.ClearTextOnFocus = false
-    convertedBox.TextSize = 18
-    convertedBox.Font = Enum.Font.Gotham
-    convertedBox.PlaceholderText = "Converted text will appear here..."
-    convertedBox.Parent = frame
-
-    local convertedCorner = Instance.new("UICorner")
-    convertedCorner.CornerRadius = UDim.new(0, 5)
-    convertedCorner.Parent = convertedBox
-
-    -- Reminder label
-    local reminderLabel = Instance.new("TextLabel")
-    reminderLabel.Size = UDim2.new(1, -20, 0, 40)
-    reminderLabel.Position = UDim2.new(0, 10, 1, -50)
-    reminderLabel.BackgroundTransparency = 1
-    reminderLabel.Text = "If you are getting tagged, say /e roblox in chat."
-    reminderLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    reminderLabel.TextSize = 14
-    reminderLabel.Font = Enum.Font.Gotham
-    reminderLabel.TextWrapped = true
-    reminderLabel.Parent = frame
-
-    -- Small Caps Alphabet Conversion Map
-    local smallCapsAlphabet = {
-        a = "ᴀ", b = "ʙ", c = "ᴄ", d = "ᴅ", e = "ᴇ", f = "ꜰ", g = "ɢ",
-        h = "ʜ", i = "ɪ", j = "ᴊ", k = "ᴋ", l = "ʟ", m = "ᴍ", n = "ɴ",
-        o = "ᴏ", p = "ᴘ", q = "Q", r = "ʀ", s = "ꜱ", t = "ᴛ", u = "ᴜ",
-        v = "ᴠ", w = "ᴡ", x = "x", y = "ʏ", z = "ᴢ"
-    }
-
-    -- Function to convert text to small caps alphabet
-    local function convertToSmallCaps(text)
-        local result = ""
-        for i = 1, #text do
-            local char = text:sub(i, i)
-            result = result .. (smallCapsAlphabet[char] or char)
-        end
-        return result
-    end
-
-    -- Update the convertedBox whenever input changes
-    inputBox.Changed:Connect(function(property)
-        if property == "Text" then
-            convertedBox.Text = convertToSmallCaps(inputBox.Text)
-        end
-    end)
-
-    -- Minimize functionality
-    local isMinimized = false
-    minimizeButton.MouseButton1Click:Connect(function()
-        if isMinimized then
-            frame.Size = UDim2.new(0, 400, 0, 250)
-            inputBox.Visible = true
-            convertedBox.Visible = true
-            reminderLabel.Visible = true
-            minimizeButton.Text = "-"
-        else
-            frame.Size = UDim2.new(0, 400, 0, 40)
-            inputBox.Visible = false
-            convertedBox.Visible = false
-            reminderLabel.Visible = false
-            minimizeButton.Text = "+"
-        end
-        isMinimized = not isMinimized
-    end)
-
-    -- Close button functionality (Delete GUI)
-    closeButton.MouseButton1Click:Connect(function()
-        screenGui:Destroy()
-    end)
-
-    -- Draggable GUI Logic
-    local dragging, dragInput, dragStart, startPos
-
-    frame.InputBegan:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = true
-            dragStart = input.Position
-            startPos = frame.Position
-        end
-    end)
-
-    frame.InputEnded:Connect(function(input)
-        if input.UserInputType == Enum.UserInputType.MouseButton1 then
-            dragging = false
-        end
-    end)
-
-    frame.InputChanged:Connect(function(input)
-        if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
-            local delta = input.Position - dragStart
-            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-        end
-    end)
+    return result
 end
 
--- Initialize the GUI and ensure it persists after death
-createSillyBypasserGui()
-player.CharacterAdded:Connect(createSillyBypasserGui)
+-- Update the convertedBox whenever input changes
+inputBox.Changed:Connect(function(property)
+    if property == "Text" then
+        convertedBox.Text = convertToSmallCaps(inputBox.Text)
+    end
+end)
+
+-- Notification about K to toggle GUI (at the top center)
+local notificationLabel = Instance.new("TextLabel")
+notificationLabel.Size = UDim2.new(0, 400, 0, 30)
+notificationLabel.Position = UDim2.new(0.5, -200, 0, 10)  -- Centered at the top
+notificationLabel.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+notificationLabel.Text = "Use K to open and close the GUI"
+notificationLabel.TextSize = 16
+notificationLabel.Font = Enum.Font.Gotham
+notificationLabel.TextWrapped = true
+notificationLabel.Parent = screenGui
+
+-- Hide notification after 10 seconds
+wait(10)
+notificationLabel:Destroy()
+
+-- Key press detection for toggling the GUI (K to open/close)
+local guiVisible = true
+local UserInputService = game:GetService("UserInputService")
+UserInputService.InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.K then
+        guiVisible = not guiVisible
+        frame.Visible = guiVisible
+    end
+end)
+
+-- Red X to close the GUI (Top Right)
+local closeButton = Instance.new("TextButton")
+closeButton.Size = UDim2.new(0, 30, 0, 30)
+closeButton.Position = UDim2.new(1, -40, 0, 10)
+closeButton.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+closeButton.Text = "X"
+closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+closeButton.TextSize = 18
+closeButton.Font = Enum.Font.GothamBold
+closeButton.Parent = frame
+
+closeButton.MouseButton1Click:Connect(function()
+    frame:Destroy()  -- Destroy the entire GUI when the button is clicked
+end)
+
+-- Draggable GUI Logic
+local dragging, dragInput, dragStart, startPos
+
+frame.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = true
+        dragStart = input.Position
+        startPos = frame.Position
+    end
+end)
+
+frame.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        dragging = false
+    end
+end)
+
+frame.InputChanged:Connect(function(input)
+    if dragging and input.UserInputType == Enum.UserInputType.MouseMovement then
+        local delta = input.Position - dragStart
+        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+    end
+end)
