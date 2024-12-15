@@ -1,8 +1,8 @@
+--I know this is shit but plz dont copy
 local player = game.Players.LocalPlayer
 local screenGui
 local frame
 
--- Function to create the GUI
 local function createGui()
     -- Check if the ScreenGui already exists, if not create it
     if not screenGui then
@@ -10,8 +10,6 @@ local function createGui()
         screenGui.Name = "SillyBypasserGui"
         screenGui.Parent = player:WaitForChild("PlayerGui")
     end
-
-    -- Create the main frame
     if not frame then
         frame = Instance.new("Frame")
         frame.Size = UDim2.new(0, 400, 0, 250)
@@ -25,7 +23,6 @@ local function createGui()
         frameCorner.CornerRadius = UDim.new(0, 10)
         frameCorner.Parent = frame
 
-        -- Version label (Top Left)
         local versionLabel = Instance.new("TextLabel")
         versionLabel.Size = UDim2.new(0, 50, 0, 20)
         versionLabel.Position = UDim2.new(0, 10, 0, 10)  -- Top left
@@ -36,7 +33,6 @@ local function createGui()
         versionLabel.Font = Enum.Font.Gotham
         versionLabel.Parent = frame
 
-        -- Title label
         local titleLabel = Instance.new("TextLabel")
         titleLabel.Size = UDim2.new(1, -40, 0, 30)
         titleLabel.Position = UDim2.new(0, 10, 0, 5)
@@ -47,7 +43,6 @@ local function createGui()
         titleLabel.Font = Enum.Font.GothamBold
         titleLabel.Parent = frame
 
-        -- Input TextBox
         local inputBox = Instance.new("TextBox")
         inputBox.Size = UDim2.new(1, -20, 0, 50)
         inputBox.Position = UDim2.new(0, 10, 0, 40)
@@ -62,8 +57,6 @@ local function createGui()
         local inputCorner = Instance.new("UICorner")
         inputCorner.CornerRadius = UDim.new(0, 5)
         inputCorner.Parent = inputBox
-
-        -- Converted TextBox (read-only)
         local convertedBox = Instance.new("TextBox")
         convertedBox.Size = UDim2.new(1, -20, 0, 50)
         convertedBox.Position = UDim2.new(0, 10, 0, 100)
@@ -81,7 +74,6 @@ local function createGui()
         convertedCorner.CornerRadius = UDim.new(0, 5)
         convertedCorner.Parent = convertedBox
 
-        -- Reminder label
         local reminderLabel = Instance.new("TextLabel")
         reminderLabel.Size = UDim2.new(1, -20, 0, 40)
         reminderLabel.Position = UDim2.new(0, 10, 1, -50)
@@ -112,10 +104,9 @@ local function createGui()
         -- Random font styles including new characters
         local fontStyles = {
             "̷", "̴", "͓̽", "̶", "͞", "̅", "̑", "͠", "̒", "͟", "͜", -- original styles
-            "̳", "̾"  -- new styles for A̳, a̾, etc.
+            "̳", "̾"
         }
 
-        -- Function to randomize font styles in a string
         local function randomizeFontStyles(text)
             local result = ""
             for i = 1, #text do
@@ -126,14 +117,12 @@ local function createGui()
             return result
         end
 
-        -- Update the convertedBox whenever input changes
         inputBox.Changed:Connect(function(property)
             if property == "Text" then
                 convertedBox.Text = randomizeFontStyles(inputBox.Text)
             end
         end)
 
-        -- Notification about K to toggle GUI (at the top center)
         local notificationLabel = Instance.new("TextLabel")
         notificationLabel.Size = UDim2.new(0, 400, 0, 30)
         notificationLabel.Position = UDim2.new(0.5, -200, 0, 10)  -- Centered at the top
@@ -145,11 +134,9 @@ local function createGui()
         notificationLabel.TextWrapped = true
         notificationLabel.Parent = screenGui
 
-        -- Hide notification after 10 seconds
         wait(10)
         notificationLabel:Destroy()
 
-        -- Key press detection for toggling the GUI (K to open/close)
         local guiVisible = true
         local UserInputService = game:GetService("UserInputService")
 
@@ -170,7 +157,6 @@ local function createGui()
             end
         end)
 
-        -- Red X to close the GUI (Top Right)
         local closeButton = Instance.new("TextButton")
         closeButton.Size = UDim2.new(0, 30, 0, 30)
         closeButton.Position = UDim2.new(1, -40, 0, 10)
@@ -185,7 +171,6 @@ local function createGui()
             frame:Destroy()  -- Destroy the entire GUI when the button is clicked
         end)
 
-        -- Draggable GUI Logic
         local dragging, dragInput, dragStart, startPos
 
         frame.InputBegan:Connect(function(input)
@@ -211,9 +196,8 @@ local function createGui()
     end
 end
 
--- Re-create GUI on respawn
 player.CharacterAdded:Connect(function()
-    createGui()  -- Re-create the GUI whenever the player respawns
+    createGui()
 end)
 
 -- Create the GUI on initial load
