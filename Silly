@@ -21,7 +21,7 @@ local versionLabel = Instance.new("TextLabel")
 versionLabel.Size = UDim2.new(0, 50, 0, 20)
 versionLabel.Position = UDim2.new(0, 10, 0, 10)  -- Top left
 versionLabel.BackgroundTransparency = 1
-versionLabel.Text = "V.0.55"
+versionLabel.Text = "V.0.6"  -- Updated version number
 versionLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 versionLabel.TextSize = 14
 versionLabel.Font = Enum.Font.Gotham
@@ -148,8 +148,19 @@ notificationLabel:Destroy()
 -- Key press detection for toggling the GUI (K to open/close)
 local guiVisible = true
 local UserInputService = game:GetService("UserInputService")
+
+local isTyping = false
+
+inputBox.Focused:Connect(function()
+    isTyping = true
+end)
+
+inputBox.FocusLost:Connect(function()
+    isTyping = false
+end)
+
 UserInputService.InputBegan:Connect(function(input)
-    if input.KeyCode == Enum.KeyCode.K then
+    if input.KeyCode == Enum.KeyCode.K and not isTyping then
         guiVisible = not guiVisible
         frame.Visible = guiVisible
     end
